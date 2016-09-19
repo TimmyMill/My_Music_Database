@@ -2,9 +2,11 @@ import database
 import sys
 from album import *
 
+# lists containing data to use for print statements and user selection choices
 genres = ('Alternative', 'Blues', 'Classical', 'Country', 'Dance', 'Electronic', 'Hip-Hop/Rap', 'Jazz', 'Pop',
           'R&B/Soul', 'Reggae', 'Rock')
 formats = ('8-Track', 'Cassette', 'CD', 'Digital', 'Vinyl')
+search_options = ('Artist', 'Album', 'Genre', 'Format')
 
 
 def create_album(artist, title, genre, audio_format):
@@ -12,19 +14,22 @@ def create_album(artist, title, genre, audio_format):
 
 
 def display_main_menu():
-    print('1) Search your library')
-    print('2) Add to library')
-    print('3) Delete from library')
-    print('4) Exit')
+    print('Main Menu')
+    print('\t1) Search your library')
+    print('\t2) Add to library')
+    print('\t3) Delete from library')
+    print('\t4) Exit')
 
 
 def main_menu():
     print('My Music Library')
+    # print('\tSelect an option: ')
     while True:
         display_main_menu()
-        menu_choice = input('Select an option: ')
+        # menu_choice = input('Select an option: ')
+        menu_choice = input('>')
         if menu_choice == '1':
-            pass
+            search_library()
 
         elif menu_choice == '2':
             add_to_library()
@@ -39,8 +44,34 @@ def main_menu():
             print('Please select a valid option\n')
 
 
+def search_menu():
+    print('\tSearch by ')
+    print('\t---------')
+    option_number = 0
+    for option in search_options:
+        option_number += 1
+        print('\t' + str(option_number) + ') ' + option)
+
+
 def search_library():
-    pass
+    print('Search Menu\n')
+    search_option = ''
+    while True:
+        search_menu()
+        try:
+            search_choice = int(input('>'))
+            search_options_length = len(search_options)
+            if search_choice in range(1, search_options_length + 1):
+                search_option = search_options[search_choice - 1]
+                break
+
+            else:
+                print('Select an option 1-' + str(search_options_length) + '\n')
+
+        except ValueError:
+            print('Enter your choice as a number\n')
+
+    database.search_music(search_option)
 
 
 def add_to_library():
@@ -80,11 +111,12 @@ def get_genre():
             if genre_choice in range(1, genre_list_length + 1):
                 genre = genres[genre_choice - 1]  # gets the element from the list using the elements index number
                 break
+                
             else:
-                print('Select an option 1-' + str(genre_list_length))
+                print('Select an option 1-' + str(genre_list_length) + '\n')
 
         except ValueError:
-            print('Select a number')
+            print('Enter your choice as a number\n')
 
     return genre
 
