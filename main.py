@@ -44,7 +44,7 @@ def main_menu():
             print('Please select a valid option\n')
 
 
-def search_menu():
+def display_search_menu():
     print('\tSearch by ')
     print('\t---------')
     option_number = 0
@@ -53,16 +53,32 @@ def search_menu():
         print('\t' + str(option_number) + ') ' + option)
 
 
+def get_search_keyword(search_type, keyword):
+    if search_type == 'Artist':
+        keyword = get_artist()
+    if search_type == 'Album':
+        keyword = get_album()
+    if search_type == 'Genre':
+        keyword = get_genre()
+    if search_type == 'Format':
+        keyword = get_format()
+
+    return keyword
+
+
 def search_library():
     print('Search Menu\n')
     search_option = ''
+    keyword = ''
     while True:
-        search_menu()
+        display_search_menu()
         try:
             search_choice = int(input('>'))
             search_options_length = len(search_options)
+
             if search_choice in range(1, search_options_length + 1):
                 search_option = search_options[search_choice - 1]
+                keyword = get_search_keyword(search_option, keyword)
                 break
 
             else:
@@ -71,7 +87,9 @@ def search_library():
         except ValueError:
             print('Enter your choice as a number\n')
 
-    database.search_music(search_option)
+    # print('Search by: ' + search_option + '\nSearch for: ' + keyword)
+    # Use search method from database class, passing in the column to search and the keyword to search for
+    database.search_music(search_option, keyword)
 
 
 def add_to_library():
@@ -111,7 +129,7 @@ def get_genre():
             if genre_choice in range(1, genre_list_length + 1):
                 genre = genres[genre_choice - 1]  # gets the element from the list using the elements index number
                 break
-                
+
             else:
                 print('Select an option 1-' + str(genre_list_length) + '\n')
 

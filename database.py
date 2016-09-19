@@ -16,13 +16,14 @@ format TEXT NOT NULL );'''))
     # print('DB closed')
 
 
-def search_music(search_option):
+def search_music(column, keyword):
     db = connect('my_music_library.db')
     search = db.cursor()
     try:
-        search.execute('SELECT * FROM my_music WHERE title LIKE ?', ('%' + movie_title + '%',))
-        for movies in search.fetchall():
-            print(create_movie(movies[0], str(movies[1]), movies[2], movies[3], str(movies[4])))
+        search.execute('SELECT * FROM my_music WHERE' + column + 'LIKE' + keyword)
+        # search.execute('SELECT * FROM my_music WHERE' + column + 'LIKE', ('%' + keyword + '%', ))
+        for albums in search.fetchall():
+            print(albums)
 
     except Error as e:
         print('Error: ', e, 'occurred')
