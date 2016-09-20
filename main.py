@@ -48,11 +48,14 @@ def display_search_menu():
     print('\tSearch by ')
     print('\t---------')
     option_number = 0
+    # iterate search options list to display a formatted menu
     for option in search_options:
         option_number += 1
         print('\t' + str(option_number) + ') ' + option)
 
 
+# used by the search method to determine what the user wants to search by (artist, album, genre, format)
+# calls the method using the given "search type", gets user input, and returns a keyword to pass to the database
 def get_search_keyword(search_type, keyword):
     if search_type == 'Artist':
         keyword = get_artist().upper()
@@ -74,8 +77,9 @@ def search_library():
         display_search_menu()
         try:
             search_choice = int(input('>'))
-            search_options_length = len(search_options)
+            search_options_length = len(search_options)  # number of elements in the search options list
 
+            # determines what to search the database by, then uses the method to get user input and return a keyword
             if search_choice in range(1, search_options_length + 1):
                 search_option = search_options[search_choice - 1]
                 keyword = get_search_keyword(search_option, keyword)
@@ -177,7 +181,6 @@ def is_empty_field(name, message):
 
 
 def main():
-    # create_music_table()
     database.create_music_table()
     main_menu()
 
