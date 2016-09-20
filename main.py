@@ -55,9 +55,9 @@ def display_search_menu():
 
 def get_search_keyword(search_type, keyword):
     if search_type == 'Artist':
-        keyword = get_artist()
+        keyword = get_artist().upper()
     if search_type == 'Album':
-        keyword = get_album()
+        keyword = get_album().upper()
     if search_type == 'Genre':
         keyword = get_genre()
     if search_type == 'Format':
@@ -87,14 +87,13 @@ def search_library():
         except ValueError:
             print('Enter your choice as a number\n')
 
-    # print('Search by: ' + search_option + '\nSearch for: ' + keyword)
     # Use search method from database class, passing in the column to search and the keyword to search for
     database.search_music(search_option, keyword)
 
 
 def add_to_library():
-    artist = get_artist()
-    title = get_album()
+    artist = get_artist().upper()
+    title = get_album().upper()
     genre = get_genre()
     audio_format = get_format()
     database.add_music(create_album(artist, title, genre, audio_format))

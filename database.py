@@ -1,5 +1,5 @@
 import traceback
-from _sqlite3 import *
+from sqlite3 import *
 
 
 def create_music_table():
@@ -20,10 +20,13 @@ def search_music(column, keyword):
     db = connect('my_music_library.db')
     search = db.cursor()
     try:
-        search.execute('SELECT * FROM my_music WHERE' + column + 'LIKE' + keyword)
-        # search.execute('SELECT * FROM my_music WHERE' + column + 'LIKE', ('%' + keyword + '%', ))
-        for albums in search.fetchall():
-            print(albums)
+        search.execute('SELECT * FROM my_music WHERE ' + column + ' LIKE ?', ('%' + keyword + '%',))
+        column_names = get_column_names()
+        rows = search.fetchall()
+        print(column_names[0], column_names[1], column_names[2], column_names[3])
+
+        for row in rows:
+            print(row)
 
     except Error as e:
         print('Error: ', e, 'occurred')
@@ -31,6 +34,15 @@ def search_music(column, keyword):
 
     finally:
         db.close()
+
+
+def get_column_names():
+    db = connect('my_music_library.db')
+    cur = db.cursor()
+    cur.execute('SELECT * FROM my_music')
+    column_names = [cn[0].upper() for cn in cur.description]
+    db.close()
+    return column_names
 
 
 def add_music(album):
