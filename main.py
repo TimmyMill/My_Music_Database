@@ -92,7 +92,66 @@ def search_library():
             print('Enter your choice as a number\n')
 
     # Use search method from database class, passing in the column to search and the keyword to search for
-    database.search_music(search_option, keyword)
+    display_search_results(database.search_music(search_option, keyword))
+
+
+def display_search_results(results):
+    for result in results:
+        artist = result[0]
+        album = result[1]
+        genre = result[2]
+        album_format = result[3]
+        format_results(results, artist, album, genre, album_format)
+
+
+def get_columns_max_size(results):
+    artist_length = 0
+    album_length = 0
+    genre_length = 0
+    format_length = 0
+
+    for result in results:
+        artist_length = len(result[0]) + 1 if len(result[0]) > artist_length else artist_length + 1
+        album_length = len(result[1]) + 1 if len(result[1]) > album_length else album_length + 1
+        genre_length = len(result[2]) + 1 if len(result[2]) > genre_length else genre_length + 1
+        format_length = len(result[3]) + 1 if len(result[3]) > format_length else format_length + 1
+
+    return [artist_length, album_length, genre_length, format_length]
+
+
+def format_search_results(results, result):
+    album_element_sizes = get_columns_max_size(results)
+    artist = result[0] + " " * (album_element_sizes[0] - len(result[0])) if len(result[0]) < album_element_sizes[0] \
+        else result[0]
+    album = result[1] + " " * (album_element_sizes[1] - len(result[1])) if len(result[1]) < album_element_sizes[1] \
+        else result[1]
+    genre = result[2] + " " * (album_element_sizes[2] - len(result[2])) if len(result[2]) < album_element_sizes[2] \
+        else result[2]
+
+    if len(result[3]) < album_element_sizes[3]:
+        album_format = result[3] + " " * (album_element_sizes[3] - len(result[3]))
+    else:
+        album_format = result[3]
+
+    print(artist + album + genre + album_format)
+
+
+def format_results(results, artist, album, genre, album_format):
+    column_max_size = get_columns_max_size(results)
+
+    if len(artist) < column_max_size[0]:
+        artist += " " * (column_max_size[0] - len(artist))
+
+    if len(album) < column_max_size[1]:
+        album += " " * (column_max_size[1] - len(album))
+
+    if len(genre) < column_max_size[2]:
+        genre += " " * (column_max_size[2] - len(genre))
+
+    if len(album_format) < column_max_size[3]:
+        album_format += " " * (column_max_size[3] - len(album_format))
+
+    print(artist + album + genre + album_format)
 
 
 def add_to_library():

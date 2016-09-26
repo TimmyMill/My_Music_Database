@@ -21,12 +21,18 @@ def search_music(column, keyword):
     search = db.cursor()
     try:
         search.execute('SELECT * FROM my_music WHERE ' + column + ' LIKE ?', ('%' + keyword + '%',))
-        column_names = get_column_names()
+        # column_names = get_column_names()
         rows = search.fetchall()
-        print(column_names[0], column_names[1], column_names[2], column_names[3])
+        search_results = [row for row in rows]
+        # noinspection PyTypeChecker
+        search_results.insert(0, get_column_names())
+        return search_results
 
-        for row in rows:
-            print(row)
+        # return [column_names, (row for row in rows)]
+        # print(column_names[0], column_names[1], column_names[2], column_names[3])
+        #
+        # for row in rows:
+        #     print(row)
 
     except Error as e:
         print('Error: ', e, 'occurred')
@@ -65,3 +71,18 @@ def add_music(album):
     finally:
         db.close()
 
+
+def remove_music(title):
+    db = connect('my_music_library.db')
+    delete = db.cursor()
+    try:
+        delete.execute('DELETE FROM my_music WHERE album=?', (title, ))
+        db.commit()
+
+    except Error as e:
+        print('Error ', e, ' occurred. Your album might not be saved')
+        traceback.print_exc()
+        db.rollback()
+
+    finally:
+        db.close()
