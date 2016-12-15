@@ -8,9 +8,66 @@ genres = ('Alternative', 'Blues', 'Classical', 'Country', 'Dance', 'Electronic',
 formats = ('8-Track', 'Cassette', 'CD', 'Digital', 'Vinyl')
 search_options = ('Artist', 'Album', 'Genre', 'Format')
 
+test_data = 'test_data.txt'  # reference to test file
+
 
 def create_album(artist, title, genre, audio_format):
     return Album(artist, title, genre, audio_format)
+
+
+def load_test_data():
+    # creates a list of substrings using method call
+    text_file = process_text_file()
+    # creates an empty list to store our music
+    music_list = []
+
+    # iterate through the list of substrings
+    # each element in the list contains 5 substrings,
+    # each containing a parameter needed to create a movie object
+    for album in text_file:
+        artist = album[0].strip()
+        title = album[1].strip()
+        genre = album[2].strip()
+        audio_format = album[3].strip()
+
+        # calls method to create a movie and then adds the movie to the end of our list
+        music_list.append(create_album(artist, title, genre, audio_format))
+
+    for album in music_list:
+        database.add_music(album)
+
+    return music_list
+
+
+def read_file(filename):
+    # opens the given text file in READ mode
+    file = open(filename, 'rt')
+    # creates a list to store each line from the text file
+    movie_list = []
+
+    # loops until all of the lines from the file have been read
+    while True:
+        inline = file.readline()
+
+        if inline == '':
+            break
+
+        else:
+            movie_list.append(inline)  # adds each line to the end of our list
+
+    return movie_list
+
+
+def process_text_file():
+    album = []
+
+    # calls method to read text file and returns a list
+    # iterate through each element in the list
+    for line in read_file(test_data):
+        line = line.split(';')  # splits the elements into substrings
+        album.append(line)
+
+    return album
 
 
 def display_main_menu():
@@ -223,6 +280,7 @@ def is_empty_field(name, message):
 
 def main():
     database.create_music_table()
+    load_test_data()
     main_menu()
 
 

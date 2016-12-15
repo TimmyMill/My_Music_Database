@@ -28,12 +28,6 @@ def search_music(column, keyword):
         search_results.insert(0, get_column_names())
         return search_results
 
-        # return [column_names, (row for row in rows)]
-        # print(column_names[0], column_names[1], column_names[2], column_names[3])
-        #
-        # for row in rows:
-        #     print(row)
-
     except Error as e:
         print('Error: ', e, 'occurred')
         traceback.print_exc()
